@@ -1,0 +1,2 @@
+[pgsql-servers]
+localhost ansible_connection=local

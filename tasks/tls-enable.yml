@@ -1,0 +1,39 @@
+---
+
+- name: Enabling TLS | Create SSL directories
+  file:
+    path: "{{ item.path }}"
+    owner: "{{ item.owner| default('root') }}"
+    group: "{{ item.group| default('root') }}"
+    mode: "{{ item.mode| default(omit) }}"
+    state: directory
+  with_items:
+    - { "path": "{{ openldap_tls_cert_dir }}" }
+    - { "path": "{{ openldap_tls_private_dir }}", "owner": "{{ openldap_run_user }}", "mode": "0750" }
+
+- name: Enabling TLS | Copying SSL certificates
+  copy:
+    src: "{{ item.filename }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner| default('root') }}"
+    group: "{{ item.group| default('root') }}"
+    mode: "{{ item.mode| default(omit) }}"
+  with_items:
+    - { "filename": "{{ openldap_local_tls_cacert }}", "dest": "{{ openldap_tls_cacert }}" }
+    - { "filename": "{{ openldap_local_tls_server_cert }}", "dest": "{{ openldap_tls_server_cert }}" }
+    - { "filename": "{{ openldap_local_tls_server_key }}", "dest": "{{ openldap_tls_server_key }}", "owner": "{{ openldap_run_user }}", "mode": "0550" }
+
+- name: Enabling TLS | generating .ldif
+  template:
+    src: tls_enable.ldif.j2
+    dest: /tmp/tls_enable.ldif
+    owner: root
+    group: root
+    mode: 0600
+
+- name: Enabling TLS | import .ldif
+  shell: "ldapmodify -Y external -H ldapi:/// -f /tmp/tls_enable.ldif"
+  notify: restart openldap
+
+- name: Enabling TLS | cleaning up files
+  file: path="/tmp/tls_enable.ldif" state=absent

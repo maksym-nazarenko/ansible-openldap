@@ -1,0 +1,15 @@
+---
+
+- name: Disabling TLS | generating .ldif
+  template:
+    src: tls_disable.ldif.j2
+    dest: /tmp/tls_disable.ldif
+    owner: root
+    group: root
+    mode: 0600
+
+- name: Disabling TLS | import .ldif
+  shell: "ldapmodify -Y EXTERNAL -H ldapi:/// -f /tmp/tls_disable.ldif"
+
+- name: Disabling TLS | cleaning up files
+  file: path="/tmp/tls_disable.ldif" state=absent

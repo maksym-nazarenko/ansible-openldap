@@ -1,0 +1,10 @@
+---
+
+openldap_package_name: "slapd"
+openldap_service_name: slapd
+openldap_run_user: openldap
+openldap_conf_dir: /etc/ldap
+openldap_module_path: "/usr/lib/ldap"
+
+openldap_extra_packages:
+    - ldap-utils

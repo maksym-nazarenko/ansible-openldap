@@ -1,0 +1,27 @@
+---
+
+- name: Configure debconf
+  debconf:
+    name: "{{ openldap_package_name }}"
+    question: "{{ item.question }}"
+    vtype: "{{ item.vtype }}"
+    value: "{{ item.value }}"
+  with_items:
+    - { "question": "{{ openldap_package_name }}/password1", "vtype": "password", value: "" }
+    - { "question": "{{ openldap_package_name }}/password2", "vtype": "password", value: "" }
+    - { "question": "{{ openldap_package_name }}/backend", "vtype": "select", value: "HDB" }
+    - { "question": "{{ openldap_package_name }}/domain", "vtype": "text", value: "{{ openldap_domain }}" }
+    - { "question": "shared/organization", "vtype": "text", value: "{{ openldap_organization }}" }
+  changed_when: false
+
+- name: Installing OpenLDAP server package
+  apt: pkg="{{ openldap_package_name }}" state=present
+  register: openldap__just_installed
+
+- name: Installing OpenLDAP extra packages
+  apt: pkg="{{ item }}" state=present
+  with_items: openldap_extra_packages
+
+- name: Enabling OpenLDAP autostart
+  service: name="{{ openldap_service_name }}" enabled=true state=started
+  when: openldap__just_installed| changed

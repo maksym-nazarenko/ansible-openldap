@@ -1,0 +1,4 @@
+---
+
+- name: restart openldap
+  service: name="{{ openldap_service_name }}" state=restarted

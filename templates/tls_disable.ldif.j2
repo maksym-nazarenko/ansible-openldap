@@ -1,0 +1,18 @@
+dn: cn=config
+changetype: modify
+replace: olcTLSCACertificateFile
+olcTLSCACertificateFile: dummy
+-
+replace: olcTLSCertificateFile
+olcTLSCertificateFile: dummy
+-
+replace: olcTLSCertificateKeyFile
+olcTLSCertificateKeyFile: dummy
+
+dn: cn=config
+changetype: modify
+delete: olcTLSCACertificateFile
+-
+delete: olcTLSCertificateFile
+-
+delete: olcTLSCertificateKeyFile

@@ -1,0 +1,53 @@
+---
+
+- name: rfc2307bis | Copying schema ldif
+  copy: src=rfc2307bis.ldif dest=/tmp/rfc2307bis.ldif
+
+- name: rfc2307bis | Copying update script
+  copy:
+    src: "rfc2307bis_update.sh"
+    dest: /tmp/rfc2307bis_update.sh
+    owner: root
+    group: root
+    mode: 0750
+
+- name: rfc2307bis | Stopping slapd
+  service: name="{{ openldap_service_name }}" state=stopped
+
+- name: rfc2307bis | Making full dump
+  shell: slapcat -b 'cn=config' > {{ openldap_conf_dir }}/full_dump.ldif
+
+- name: rfc2307bis | Updating schema
+  shell: "/tmp/rfc2307bis_update.sh {{ openldap_conf_dir }}/full_dump.ldif /tmp/rfc2307bis.ldif"
+
+- name: rfc2307bis | Deleting slapd.d directory
+  file: path="{{ openldap_conf_dir }}/slapd.d" state=absent
+
+- name: rfc2307bis | Creating slapd.d directory
+  file:
+    path: "{{ openldap_conf_dir }}/slapd.d"
+    state: directory
+    owner: "{{ openldap_run_user }}"
+    group: "{{ openldap_run_user }}"
+    mode: "0750"
+
+- name: rfc2307bis | Importing updated data to directory service
+  shell: "slapadd -F {{ openldap_conf_dir }}/slapd.d -n 0 -l {{ openldap_conf_dir }}/full_dump.ldif"
+
+- name: rfc2307bis | Updating permissions for slapd.d directory
+  file:
+    path: "{{ openldap_conf_dir }}/slapd.d"
+    state: directory
+    recurse: yes
+    owner: "{{ openldap_run_user }}"
+    group: "{{ openldap_run_user }}"
+
+- name: rfc2307bis | Starting slapd
+  service: name="{{ openldap_service_name }}" state=started
+
+- name: rfc2307bis | Cleanup temporary files
+  file: path="{{ item }}" state=absent
+  with_items:
+    - /tmp/rfc2307bis.ldif
+    - /tmp/rfc2307bis_update.sh
+    - "{{ openldap_conf_dir }}/full_dump.ldif"

@@ -1,0 +1,33 @@
+---
+
+- name: Generating ldap.conf
+  template:
+    src: ldap.conf.j2
+    dest: "{{ openldap_conf_dir }}/ldap.conf"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Generate admin password hash
+  command: slappasswd -s {{ openldap_admin_password }} -n
+  register: openldap__admin_password_hash
+  no_log: true
+
+- name: Setting up admin password variable
+  set_fact:
+    openldap_admin_password_hash: "{{ openldap__admin_password_hash.stdout }}"
+
+- name: Admin password | generating .ldif
+  template:
+    src: admin_pw.ldif.j2
+    dest: /tmp/admin_pw.ldif
+    owner: root
+    group: root
+    mode: 0600
+
+- name: Admin password | import .ldif
+  shell: "ldapmodify -Y external -H ldapi:/// -f /tmp/admin_pw.ldif"
+  notify: restart openldap
+
+- name: Admin password | cleaning up files
+  file: path="/tmp/admin_pw.ldif" state=absent

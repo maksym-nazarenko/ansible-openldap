@@ -11,10 +11,18 @@ Requirements
 
 Role Variables
 --------------
-
+```yaml
 openldap_domain: "example.com"
 openldap_admin_password: "very_secret_password"
 openldap_organization: "My Company, LLC"
+
+# Replication slave
+openldap_replication_enabled: true
+openldap_replication_master_url: "ldap://ldap-master.example.com:389"
+openldap_replication_role: "slave"
+openldap_replication_bind_dn: "uid=replication-user,ou=users,dc=example,dc=com"
+openldap_replication_bind_password: "slave-pass"
+```
 
 Dependencies
 ------------

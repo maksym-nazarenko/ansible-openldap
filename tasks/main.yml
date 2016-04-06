@@ -28,19 +28,35 @@
   command: ldapsearch -Y external -H ldapi:/// -D "cn=admin,cn=config" -b "cn=config" -LLL "(objectClass=olcMemberOf)"
   register: openldap__memberof_present
   changed_when: 'not ("objectClass: olcMemberOf" in openldap__memberof_present.stdout)'
-  tags: [ openldap, openldap-configure ]
+  tags: [ openldap, openldap-schema, openldap-configure ]
 
 - include: memberof.yml
   when: openldap__memberof_present| changed
-  tags: [ openldap, openldap-configure ]
+  tags: [ openldap, openldap-schema, openldap-configure ]
 
 - name: Check whether rfc2307bis schema has been imported
   command: ldapsearch -Y external -H ldapi:/// -D "cn=admin,cn=config" -b "cn=config" -LLL "(objectClass=olcSchemaConfig)"
   register: openldap__rfc2307bis_present
   changed_when: 'not ("rfc2307bis" in openldap__rfc2307bis_present.stdout)'
   when: openldap_use_rfc2307bis
-  tags: [ openldap, openldap-configure ]
+  tags: [ openldap, openldap-schema, openldap-configure ]
 
 - include: rfc2307bis.yml
   when: openldap_use_rfc2307bis and (openldap__rfc2307bis_present| changed)
-  tags: [ openldap ]
+  tags: [ openldap, openldap-schema ]
+
+- name: Check whether syncprov overlay loaded
+  command: ldapsearch -Y external -H ldapi:/// -D "cn=admin,cn=config" -b "cn=config" -LLL "(olcOverlay=syncprov)"
+  register: openldap__syncprov_present
+  changed_when: 'not ("syncprov" in openldap__syncprov_present.stdout)'
+  when: openldap_replication_enabled and openldap_replication_role == "master"
+  tags: [ openldap, openldap-schema, openldap-configure ]
+
+- include: syncprov.yml
+  when: openldap_replication_enabled and openldap_replication_role == "master"
+  when: openldap__syncprov_present| changed
+  tags: [ openldap, openldap-schema ]
+
+- include: replication-slave.yml
+  when: openldap_replication_enabled and openldap_replication_role == "slave"
+  tags: [ openldap, openldap-replication ]

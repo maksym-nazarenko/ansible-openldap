@@ -1,0 +1,16 @@
+dn: olcDatabase={1}hdb,cn=config
+changetype: modify
+replace: olcSyncrepl
+olcSyncrepl: {0}rid={{ openldap_replication_rid }}
+  provider="{{ openldap_replication_master_url }}"
+  type={{ openldap_replication_method }}
+  interval="{{ openldap_replication_interval }}"
+  retry="30 10 300 +"
+  searchbase="{{ openldap_domain_suffix }}"
+  attrs="*,+"
+  scope=sub
+  schemachecking=off
+  bindmethod=simple
+  binddn="{{ openldap_replication_bind_dn }}"
+  credentials="{{ openldap_replication_bind_password }}"
+  starttls=yes

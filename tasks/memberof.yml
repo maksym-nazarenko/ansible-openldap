@@ -1,15 +1,15 @@
 ---
 
-- name: Initial schema | generating .ldif
+- name: MemberOf overlay | generating .ldif
   template:
     src: overlays/memberof.ldif.j2
-    dest: /tmp/initial_schema.ldif
+    dest: /tmp/memberof.ldif
     owner: root
     group: root
     mode: 0600
 
-- name: Initial schema | importing .ldif
-  shell: ldapadd -Y external -H ldapi:/// -f /tmp/initial_schema.ldif && touch {{ openldap_conf_dir }}/{{ openldap_domain }}-schema.populated creates="{{ openldap_conf_dir }}/{{ openldap_domain }}-schema.populated"
+- name: MemberOf overlay | importing .ldif
+  command: ldapadd -Y external -H ldapi:/// -f /tmp/memberof.ldif
 
-- name: Initial schema | removing .ldif
-  file: path=/tmp/initial_schema.ldif state=absent
+- name: MemberOf overlay | removing .ldif
+  file: path=/tmp/memberof.ldif state=absent

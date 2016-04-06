@@ -9,3 +9,17 @@ openldap_tls_server_cert: "{{ openldap_tls_cert_dir }}/server.pem"
 openldap_tls_server_key: "{{ openldap_tls_private_dir }}/server.key"
 openldap_use_rfc2307bis: False
 openldap_domain_suffix: "dc={{ openldap_domain.split('.')| join(',dc=') }}"
+
+# master/slave configuration
+openldap_replication_enabled: False
+# set this explicitly
+#openldap_replication_master_url: "ldap://"
+openldap_replication_role: "master"
+openldap_replication_rid: "001"
+# refreshOnly|refreshAndPersist
+openldap_replication_method: refreshOnly
+# interval: dd:hh:mm:ss
+openldap_replication_interval: 00:00:10:00
+openldap_replication_base_dn: "{{ openldap_domain_suffix }}"
+#openldap_replication_bind_dn:
+#openldap_replication_bind_password:

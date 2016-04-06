@@ -1,0 +1,10 @@
+dn: cn=module,cn=config
+objectClass: olcModuleList
+cn: module
+olcModulePath: {{ openldap_module_path }}
+olcModuleLoad: syncprov.so
+
+dn: olcOverlay=syncprov,olcDatabase={1}hdb,cn=config
+objectClass: olcOverlayConfig
+objectClass: olcSyncProvConfig
+olcOverlay: syncprov

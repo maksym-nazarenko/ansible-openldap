@@ -1,0 +1,16 @@
+---
+
+galaxy_info:
+  author: Maxim Nazarenko
+  description: OpenLDAP install and configure
+  company: Onix Systems
+  license: license (MIT)
+  min_ansible_version: 1.9
+  platforms:
+  - name: Ubuntu
+    versions:
+    - trusty
+  categories:
+  - database
+dependencies:
+  - onix.openldap-common

@@ -5,7 +5,7 @@ cn: module
 olcModulePath: {{ openldap_module_path }}
 olcModuleLoad: memberof.so
 
-dn: olcOverlay=memberof,olcDatabase={1}hdb,cn=config
+dn: olcOverlay=memberof,{{ openldap_datadb_config_dn }}
 objectClass: olcConfig
 objectClass: olcMemberOf
 objectClass: olcOverlayConfig

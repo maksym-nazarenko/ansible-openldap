@@ -1,0 +1,15 @@
+dn: {{ openldap_configdb_config_dn }}
+changetype: modify
+replace: olcRootDN
+olcRootDN: cn=admin,cn=config
+-
+replace: olcRootPW
+olcRootPW: {{ openldap_admin_password_hash }}
+
+dn: {{ openldap_datadb_config_dn }}
+changetype: modify
+replace: olcRootDN
+olcRootDN: cn=admin,{{ openldap_domain_suffix }}
+-
+replace: olcRootPW
+olcRootPW: {{ openldap_admin_password_hash }}

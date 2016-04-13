@@ -17,7 +17,6 @@ addons:
     - python-pip
 
 before_install:
-  - printf "[defaults]\nroles_path = /ansible/roles/\n" > ansible.cfg
   - docker pull ubuntu:trusty
 
 install: []

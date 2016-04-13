@@ -14,6 +14,7 @@
 - name: Check whether TLS is enabled
   command: ldapsearch -Y external -H ldapi:/// -D "cn=admin,cn=config" -b "cn=config" -LLL "(&(objectClass=olcGlobal)(olcTLSCertificateKeyFile=*))"
   register: openldap__tls_state
+  changed_when: false
   tags: [ openldap, openldap-configure ]
 
 - include: tls-enable.yml
@@ -24,7 +25,7 @@
   when: not openldap_tls_enable and ("olcTLSCertificateKeyFile" in openldap__tls_state.stdout)
   tags: [ openldap, openldap-configure ]
 
-- name: Check whether initial schema has been imported
+- name: Check whether memberOf overlay present
   command: ldapsearch -Y external -H ldapi:/// -D "cn=admin,cn=config" -b "cn=config" -LLL "(objectClass=olcMemberOf)"
   register: openldap__memberof_present
   changed_when: 'not ("objectClass: olcMemberOf" in openldap__memberof_present.stdout)'
@@ -44,19 +45,3 @@
 - include: rfc2307bis.yml
   when: openldap_use_rfc2307bis and (openldap__rfc2307bis_present| changed)
   tags: [ openldap, openldap-schema ]
-
-- name: Check whether syncprov overlay loaded
-  command: ldapsearch -Y external -H ldapi:/// -D "cn=admin,cn=config" -b "cn=config" -LLL "(olcOverlay=syncprov)"
-  register: openldap__syncprov_present
-  changed_when: 'not ("syncprov" in openldap__syncprov_present.stdout)'
-  when: openldap_replication_enabled and openldap_replication_role == "master"
-  tags: [ openldap, openldap-schema, openldap-configure ]
-
-- include: syncprov.yml
-  when: openldap_replication_enabled and openldap_replication_role == "master"
-  when: openldap__syncprov_present| changed
-  tags: [ openldap, openldap-schema ]
-
-- include: replication-slave.yml
-  when: openldap_replication_enabled and openldap_replication_role == "slave"
-  tags: [ openldap, openldap-replication ]

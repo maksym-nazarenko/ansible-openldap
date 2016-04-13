@@ -1,12 +1,6 @@
 ---
 
-- name: Generating ldap.conf
-  template:
-    src: ldap.conf.j2
-    dest: "{{ openldap_conf_dir }}/ldap.conf"
-    owner: root
-    group: root
-    mode: 0644
+- include: _admin_config_password.yml
 
 - include: _admin_password.yml
-  when: openldap_replication_role != "slave"
+  when: openldap_update_admin_password

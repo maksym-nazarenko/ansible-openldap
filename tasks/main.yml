@@ -18,11 +18,11 @@
   tags: [ openldap, openldap-configure ]
 
 - include: tls-enable.yml
-  when: openldap_tls_enable
+  when: openldap_tls_enabled
   tags: [ openldap, openldap-configure ]
 
 - include: tls-disable.yml
-  when: not openldap_tls_enable and ("olcTLSCertificateKeyFile" in openldap__tls_state.stdout)
+  when: not openldap_tls_enabled and ("olcTLSCertificateKeyFile" in openldap__tls_state.stdout)
   tags: [ openldap, openldap-configure ]
 
 - name: Check whether memberOf overlay present

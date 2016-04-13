@@ -11,17 +11,25 @@
     - { "path": "{{ openldap_tls_cert_dir }}" }
     - { "path": "{{ openldap_tls_private_dir }}", "owner": "{{ openldap_run_user }}", "mode": "0750" }
 
-- name: Enabling TLS | Copying SSL certificates
+- name: Copying SSL certificates
   copy:
-    src: "{{ item.filename }}"
+    src: "{{ item.src }}"
     dest: "{{ item.dest }}"
+    mode: "{{ item.mode| default('0640') }}"
     owner: "{{ item.owner| default('root') }}"
     group: "{{ item.group| default('root') }}"
-    mode: "{{ item.mode| default(omit) }}"
   with_items:
-    - { "filename": "{{ openldap_local_tls_cacert }}", "dest": "{{ openldap_tls_cacert }}" }
-    - { "filename": "{{ openldap_local_tls_server_cert }}", "dest": "{{ openldap_tls_server_cert }}" }
-    - { "filename": "{{ openldap_local_tls_server_key }}", "dest": "{{ openldap_tls_server_key }}", "owner": "{{ openldap_run_user }}", "mode": "0550" }
+    - src: "{{ openldap_tls_local_cacert }}"
+      dest: "{{ openldap_tls_cacert }}"
+      mode: "0644"
+    - src: "{{ openldap_tls_local_server_cert }}"
+      dest: "{{ openldap_tls_server_cert }}"
+      mode: "0644"
+    - src: "{{ openldap_tls_local_server_key }}"
+      dest: "{{ openldap_tls_server_key }}"
+      mode: "0640"
+      owner: "{{ openldap_run_user }}"
+      group: "{{ openldap_run_user }}"
 
 - name: Enabling TLS | generating .ldif
   template:

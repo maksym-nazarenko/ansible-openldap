@@ -25,3 +25,6 @@
 - name: Enabling OpenLDAP autostart
   service: name="{{ openldap_service_name }}" enabled=true state=started
   when: openldap__just_installed| changed
+
+- include: _initial_access_rules.yml
+  when: openldap__just_installed| changed

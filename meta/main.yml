@@ -13,4 +13,4 @@ galaxy_info:
   categories:
   - database
 dependencies:
-  - onix.openldap-common
+  - maxim-nazarenko.openldap-common

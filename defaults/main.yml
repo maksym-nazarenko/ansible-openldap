@@ -13,7 +13,7 @@ openldap_tls_local_server_key: "{{ openldap_tls_local_dir }}/{{ openldap_tls_loc
 openldap_tls_dir: "{{ openldap_conf_dir }}/ssl"
 openldap_tls_private_dir: "{{ openldap_tls_dir }}/private"
 openldap_tls_cert_dir: "{{ openldap_tls_dir }}/certs"
-openldap_tls_cacert: "{{ openldap_tls_cert_dir }}/ca.pem"
+openldap_tls_cacert: "{{ openldap_tls_cert_dir }}/ca.crt"
 openldap_tls_server_cert: "{{ openldap_tls_cert_dir }}/server.pem"
 openldap_tls_server_key: "{{ openldap_tls_private_dir }}/server.key"
 openldap_use_rfc2307bis: False

@@ -21,7 +21,7 @@ before_install:
   - docker run --name openldap -dit -v "$TRAVIS_BUILD_DIR:/ansible/roles/openldap:ro" ubuntu:trusty
 
 install:
-  - docker exec -it openldap /bin/sh -c "apt-get update && apt-get install -y python-dev python-pip wget curl ca-certificates && pip install ansible==1.9.4
+  - docker exec -it openldap /bin/sh -c "apt-get update && apt-get install -y python-dev python-pip wget curl ca-certificates && pip install ansible==1.9.4"
 
 script:
   - docker exec -it openldap /ansible/roles/openldap/tests/run-tests.sh

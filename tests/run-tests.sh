@@ -2,6 +2,6 @@
 
 set -e
 
-cd /ansible/roles/openldap
+cd $(dirname $(readlink -f "$0"))/../tests
 ansible-galaxy install -p ../../ -r galaxy.yml --force
-ansible-playbook tests/playbook.yml -i tests/inventory
+ansible-playbook playbook.yml -i inventory

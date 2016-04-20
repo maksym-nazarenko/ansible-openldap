@@ -18,11 +18,16 @@ addons:
 
 before_install:
   - docker pull ubuntu:trusty
+  - docker run --name openldap -dit -v "$TRAVIS_BUILD_DIR:/ansible/roles/openldap:ro" ubuntu:trusty
 
-install: []
+install:
+  - docker exec -it openldap /bin/sh -c "apt-get update && apt-get install -y python-dev python-pip wget curl ca-certificates && pip install ansible==1.9.4
 
 script:
-  - docker run -t --rm -v "$TRAVIS_BUILD_DIR:/ansible/roles/onix.openldap:ro" ubuntu:trusty /bin/sh -c "apt-get update && apt-get install -y python-dev python-pip wget curl ca-certificates && pip install ansible==1.9.4 && cd /ansible/roles/onix.openldap && ansible-playbook tests/playbook.yml -i tests/inventory"
+  - docker exec -it openldap /ansible/roles/openldap/tests/run-tests.sh
+
+after_script:
+  - docker rm -f openldap
 
 notifications:
   email:

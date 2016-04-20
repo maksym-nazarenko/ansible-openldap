@@ -1,0 +1,4 @@
+---
+
+- src: maxim-nazarenko.openldap-common
+  name: openldap-common

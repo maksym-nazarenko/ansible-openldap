@@ -7,4 +7,4 @@
     openldap_admin_password: "very_secret_password"
     openldap_organization: "My Company, LLC"
   roles:
-    - role: onix.openldap
+    - role: openldap

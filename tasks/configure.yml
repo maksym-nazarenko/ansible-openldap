@@ -1,11 +1,5 @@
 ---
 
-- name: Generating ldap.conf
-  template:
-    src: ldap.conf.j2
-    dest: "{{ openldap_conf_dir }}/ldap.conf"
-    mode: 0644
-
 - include: _admin_config_password.yml
 
 - include: _admin_password.yml

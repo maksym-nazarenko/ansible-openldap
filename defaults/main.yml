@@ -3,7 +3,7 @@
 openldap_domain_suffix: "dc={{ openldap_domain.split('.')| join(',dc=') }}"
 openldap_tls_enabled: False
 # set this explicitly if you use TLS
-#openldap_tls_local_dir: ""
+openldap_tls_local_dir: ""
 openldap_tls_local_server_cert_name: "server.crt"
 openldap_tls_local_server_key_name: "server.key"
 openldap_tls_local_cacert: "{{ openldap_tls_local_dir }}/ca.crt"

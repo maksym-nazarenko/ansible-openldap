@@ -1,6 +1,6 @@
 ---
-
 - include: _admin_config_password.yml
+  when: openldap_update_admin_password
 
 - include: _admin_password.yml
   when: openldap_update_admin_password

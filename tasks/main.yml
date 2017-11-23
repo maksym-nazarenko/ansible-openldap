@@ -11,6 +11,7 @@
   command: ldapsearch -Y external -H ldapi:/// -D "cn=admin,cn=config" -b "cn=config" -LLL "(&(objectClass=olcGlobal)(olcTLSCertificateKeyFile=*))"
   register: openldap__tls_state
   changed_when: false
+  check_mode: false
   tags: [ openldap, openldap-configure ]
 
 - include: tls-enable.yml

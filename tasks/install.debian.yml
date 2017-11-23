@@ -20,7 +20,7 @@
 
 - name: Installing OpenLDAP extra packages
   apt: pkg="{{ item }}" state=present
-  with_items: openldap_extra_packages
+  with_items: "{{ openldap_extra_packages }}"
 
 - name: Enabling OpenLDAP autostart
   service: name="{{ openldap_service_name }}" enabled=true state=started

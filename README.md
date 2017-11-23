@@ -1,7 +1,7 @@
-onix.openldap
+ansible-openldap
 =============
 
-#[![Build Status](https://travis-ci.org/maxim-nazarenko/ansible-openldap.svg?branch=master)](https://travis-ci.org/maxim-nazarenko/ansible-openldap)
+This ansible role is forked from: https://github.com/maxim-nazarenko/ansible-openldap
 
 Role for OpenLDAP server installation
 
@@ -49,4 +49,4 @@ MIT
 Author Information
 ------------------
 
-Maxim Nazarenko <maxim.nazarenko@onix-systems.com>
+Original author: Maxim Nazarenko <maxim.nazarenko@onix-systems.com>
